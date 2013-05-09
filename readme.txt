@@ -1,8 +1,8 @@
 === Youtube Control Shortcode ===
 Contributors: ardnived, ctlt-dev, ubcdev
 Tags: shortcode, youtube, media, video, controls
-Requires at least: 3.4
-Tested up to: 3.4
+Requires at least: 3.5
+Tested up to: 3.5
 Stable tag: 1.0
 
 Adds a shortcode that enables you to embed a youtube video with timestamp controls.
