@@ -134,9 +134,8 @@ class YouTube_Control_Shortcode {
 				<div class="iframe-wrapper" style="padding-bottom: <?php echo $percentage; ?>%;">
 					<div id="<?php echo self::$player_id; ?>" class="yc_player" data-vid="<?php echo $atts['id']; ?>" data-play="<?php echo $atts['autoplay']; ?>" data-hide="<?php echo $atts['autohide']; ?>" data-theme="<?php echo $atts['theme']; ?>">
 						<div class="error">
-							<img src="<?php echo plugins_url( 'img/flashplayer.jpg', __FILE__ ); ?>" width=64 height=64 />
 							<img src="<?php echo plugins_url( 'img/javascript.jpg', __FILE__ ); ?>" width=64 height=64 />
-							<div>You need Flash player 8+ and JavaScript enabled to view this video.</div>
+							<div>You need JavaScript enabled to view this video.</div>
 						</div>
 					</div>
 				</div>
