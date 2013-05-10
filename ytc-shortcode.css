@@ -16,6 +16,10 @@
     max-width: 450px;
 }
 
+.youtube-embed.no-controls .youtube-wrapper {
+    max-width: none;
+}
+
 .swfobject-wrapper {
     position: relative;
     width: 100%;

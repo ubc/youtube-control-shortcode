@@ -129,7 +129,7 @@ class YouTube_Control_Shortcode {
 		
 		ob_start();
 		?>
-		<div class="youtube-embed">
+		<div class="youtube-embed<?php echo ( $content == "" ? " no-controls" : "" ); ?>">
 			<div class="youtube-wrapper">
 				<div class="iframe-wrapper" style="padding-bottom: <?php echo $percentage; ?>%;">
 					<div id="<?php echo self::$player_id; ?>" class="yc_player" data-vid="<?php echo $atts['id']; ?>" data-play="<?php echo $atts['autoplay']; ?>" data-hide="<?php echo $atts['autohide']; ?>" data-theme="<?php echo $atts['theme']; ?>">
@@ -141,18 +141,20 @@ class YouTube_Control_Shortcode {
 					</div>
 				</div>
 			</div>
-			<div class="youtube-controls">
-				<ul>
-					<?php if ( self::$title_counter == 0 ): ?>
-						<li class="title">
-							<div>
-								<?php echo $atts['title']; ?>
-							</div>
-						</li>
-					<?php endif; ?>
-					<?php echo $content; ?>
-				</ul>
-			</div>
+			<?php if ( $content != "" ): ?>
+				<div class="youtube-controls">
+					<ul>
+						<?php if ( self::$title_counter == 0 ): ?>
+							<li class="title">
+								<div>
+									<?php echo $atts['title']; ?>
+								</div>
+							</li>
+						<?php endif; ?>
+						<?php echo $content; ?>
+					</ul>
+				</div>
+			<?php endif; ?>
 		</div>
 		<?php
 		self::$player_id = null;
