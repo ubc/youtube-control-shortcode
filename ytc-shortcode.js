@@ -26,7 +26,7 @@ var YTControl_Shortcode = {
 	},
 	
 	skipTo: function( id, time ) {
-		YouTube_SYTControl_Shortcodehortcode.players[id].seekTo( time, true );
+		YTControl_Shortcode.players[id].seekTo( time, true );
 	},
 }
 

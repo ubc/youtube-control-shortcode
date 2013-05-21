@@ -30,7 +30,7 @@ class YouTube_Control_Shortcode {
 		
 		add_action( 'init',               array( __CLASS__, 'register_script' ) );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_style' ) );
-		add_action( 'wp_footer',          array( __CLASS__, 'print_script' ) );
+		// add_action( 'wp_footer',          array( __CLASS__, 'print_script' ) );
 	}
 	
 	/**
@@ -42,7 +42,7 @@ class YouTube_Control_Shortcode {
 	 */
 	static function register_script() {
 		wp_register_style( 'ytc-shortcode',  plugins_url( 'ytc-shortcode.css', __FILE__ ) );
-		wp_register_script( 'ytc-shortcode' , plugins_url( 'ytc-shortcode.js', __FILE__ ), array( 'jquery' ), '1.0', true );
+		// wp_register_script( 'ytc-shortcode' , plugins_url( 'ytc-shortcode.js', __FILE__ ), array( 'jquery' ), '1.0', true );
 		//wp_register_script( 'youtube-iframe_api', 'https://www.youtube.com/iframe_api' );
 	}
 	
@@ -79,6 +79,7 @@ class YouTube_Control_Shortcode {
 	 * @return void
 	 */
 	public static function youtube_shortcode( $atts, $content ) {
+		wp_enqueue_script( 'ytc-shortcode' , plugins_url( 'ytc-shortcode.js', __FILE__ ), array( 'jquery' ), '1.0', true );
 		if ( ! isset( $atts['id'] ) ):
 			return;
 		endif;
@@ -182,7 +183,7 @@ class YouTube_Control_Shortcode {
 				$seconds += $segments[$i] * $increments[$i];
 			endfor;
 			
-			$action = "YouTube_Shortcode.skipTo('".self::$player_id."', ".$seconds.");";
+			$action = "YTControl_Shortcode.skipTo('".self::$player_id."', ".$seconds.");";
 			
 			ob_start();
 			?>
