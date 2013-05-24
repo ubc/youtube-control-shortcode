@@ -13,7 +13,7 @@
     float: left;
     width: 100%;
     min-width: 352px;
-    max-width: 450px;
+    max-width: 75%;
 }
 
 .youtube-embed.no-controls .youtube-wrapper {

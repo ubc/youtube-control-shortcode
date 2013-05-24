@@ -17,6 +17,7 @@ The plugin is a combination of 3 short codes.
  * autohide, adding this to the list of attributes will cause youtube's UI to automatically hide after the video starts.
  * ratio, this should be provided in a format of x:y where x is the relative width to y, which is the relative height. The default value is 72:44, which is the standard ratio for youtube videos at 720p.
  * theme, this can be either 'light' or 'dark' and changes the colouring of youtube's controls. 'dark' is default.
+ * width, the preferred width of for your video. By default it will attempt to give the video 75% of the available space.
 
 [yc_title] will insert a title into the list of controls. It's optional to use this tag, if you don't use any yc_title tags a title will be automatically added at the top of the control list. This code only takes one parameter.
  * It's first and only parameter is the text of the title. Make sure to surround your title with quotations.

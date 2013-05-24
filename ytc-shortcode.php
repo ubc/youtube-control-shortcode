@@ -91,6 +91,7 @@ class YouTube_Control_Shortcode {
 			'autohide' => '2',
 			'theme'    => "dark",
 			'ratio'    => "720:440", //Standard youtube ratio for 720p
+			'width'    => 600,
 		);
 		
 		if ( in_array( 'autoplay', $atts ) ):
@@ -131,7 +132,7 @@ class YouTube_Control_Shortcode {
 		ob_start();
 		?>
 		<div class="youtube-embed<?php echo ( $content == "" ? " no-controls" : "" ); ?>">
-			<div class="youtube-wrapper">
+			<div class="youtube-wrapper"<?php echo ( empty( $atts['width'] ) ? '' : ' style="max-width: '.$atts['width'].'px;"' ); ?>>
 				<div class="iframe-wrapper" style="padding-bottom: <?php echo $percentage; ?>%;">
 					<div id="<?php echo self::$player_id; ?>" class="yc_player" data-vid="<?php echo $atts['id']; ?>" data-play="<?php echo $atts['autoplay']; ?>" data-hide="<?php echo $atts['autohide']; ?>" data-theme="<?php echo $atts['theme']; ?>">
 						<div class="error">
