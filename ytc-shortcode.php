@@ -15,6 +15,18 @@ class YouTube_Control_Shortcode {
 	static $counter = 0;
 	static $title_counter;
 	static $player_id = null;
+	static $wrapper_id = null;
+	
+	static $defaults = array(
+		'id'       => '',
+		'title'    => "Browse Video Segments",
+		'autoplay' => '0',
+		'autohide' => '2',
+		'theme'    => "dark",
+		'ratio'    => "720:440", //Standard youtube ratio for 720p
+		'width'    => '1320px',
+		'nav'      => 'auto',
+	);
 	
 	/**
 	 * init function.
@@ -30,7 +42,6 @@ class YouTube_Control_Shortcode {
 		
 		add_action( 'init',               array( __CLASS__, 'register_script' ) );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_style' ) );
-		// add_action( 'wp_footer',          array( __CLASS__, 'print_script' ) );
 	}
 	
 	/**
@@ -41,9 +52,8 @@ class YouTube_Control_Shortcode {
 	 * @return void
 	 */
 	static function register_script() {
-		wp_register_style( 'ytc-shortcode',  plugins_url( 'ytc-shortcode.css', __FILE__ ) );
-		// wp_register_script( 'ytc-shortcode' , plugins_url( 'ytc-shortcode.js', __FILE__ ), array( 'jquery' ), '1.0', true );
-		//wp_register_script( 'youtube-iframe_api', 'https://www.youtube.com/iframe_api' );
+		wp_register_style( 'ytc-embed',  plugins_url( 'css/embed.css', __FILE__ ) );
+		wp_register_style( 'ytc-controls',  plugins_url( 'css/controls.css', __FILE__ ) );
 	}
 	
 	/**
@@ -54,19 +64,8 @@ class YouTube_Control_Shortcode {
 	 * @return void
 	 */
 	static function enqueue_style() {
-		wp_enqueue_style( 'ytc-shortcode' );
-	}
-	
-	/**
-	 * print_script function.
-	 * 
-	 * @access public
-	 * @static
-	 * @return void
-	 */
-	static function print_script() {
-		//wp_enqueue_script( 'youtube-iframe_api' );
-		wp_enqueue_script( 'ytc-shortcode' );
+		wp_enqueue_style( 'ytc-embed' );
+		wp_enqueue_style( 'ytc-controls' );
 	}
 	
 	/**
@@ -84,16 +83,6 @@ class YouTube_Control_Shortcode {
 			return;
 		endif;
 		
-		$defaults = array(
-			'id'       => '',
-			'title'    => "Browse Video Segments",
-			'autoplay' => '0',
-			'autohide' => '2',
-			'theme'    => "dark",
-			'ratio'    => "720:440", //Standard youtube ratio for 720p
-			'width'    => 600,
-		);
-		
 		if ( in_array( 'autoplay', $atts ) ):
 			$atts['autoplay'] = 'true';
 		endif;
@@ -102,37 +91,57 @@ class YouTube_Control_Shortcode {
 			$atts['autohide'] = 'true';
 		endif;
 		
-		$atts = shortcode_atts( $defaults, $atts );
+		$atts = shortcode_atts( self::$defaults, $atts );
 		
 		if ( $atts['autoplay'] == '1' || $atts['autoplay'] == 'true' ):
 			$atts['autoplay'] = '1';
 		else:
-			$atts['autoplay'] = $defaults['autoplay'];
+			$atts['autoplay'] = self::$defaults['autoplay'];
 		endif;
 		
 		if ( $atts['autohide'] == '1' || $atts['autohide'] == 'true' ):
 			$atts['autohide'] = '1';
 		else:
-			$atts['autohide'] = $defaults['autohide'];
+			$atts['autohide'] = self::$defaults['autohide'];
 		endif;
 		
 		if ( $atts['theme'] != "light" ):
-			$atts['theme'] = $defaults['theme'];
+			$atts['theme'] = self::$defaults['theme'];
+		endif;
+		
+		if ( ! in_array( $atts['nav'], array( 'auto', 'compact', 'expanded' ) ) ):
+			$atts['nav'] = self::$defaults['nav'];
+		elseif ( $atts['nav'] == 'expanded' ):
+			$atts['nav'] = "";
 		endif;
 		
 		self::$counter++;
 		self::$title_counter = 0;
 		self::$player_id = 'ytplayer-'.self::$counter;
+		self::$wrapper_id = 'ytc-wrapper-'.self::$counter;
 		
 		$ratio = split( ':', $atts['ratio'] );
 		$percentage = $ratio[1] / $ratio[0] * 100;
 		
 		$content = do_shortcode( $content );
 		
+		$classes = $atts['nav'];
+		$classes .= ( $content == "" ? " no-controls" : "" );
+		
 		ob_start();
 		?>
-		<div class="youtube-embed<?php echo ( $content == "" ? " no-controls" : "" ); ?>">
-			<div class="youtube-wrapper"<?php echo ( empty( $atts['width'] ) ? '' : ' style="max-width: '.$atts['width'].'px;"' ); ?>>
+		<div id="<?php echo self::$wrapper_id; ?>" class="ytc-embed <?php echo $classes; ?>" style="max-width: <?php echo $atts['width']; ?>" data-atts='<?php echo json_encode( $atts ); ?>' >
+			<?php if ( $content != "" ): ?>
+				<ul class="ytc-controls">
+					<?php
+						if ( self::$title_counter == 0 ):
+							echo self::title_shortcode( array( $atts['title'] ) );
+						endif;
+						echo $content;
+					?>
+				</ul>
+			<?php endif; ?>
+			<div class="ytc-wrapper">
 				<div class="iframe-wrapper" style="padding-bottom: <?php echo $percentage; ?>%;">
 					<div id="<?php echo self::$player_id; ?>" class="yc_player" data-vid="<?php echo $atts['id']; ?>" data-play="<?php echo $atts['autoplay']; ?>" data-hide="<?php echo $atts['autohide']; ?>" data-theme="<?php echo $atts['theme']; ?>">
 						<div class="error">
@@ -142,23 +151,11 @@ class YouTube_Control_Shortcode {
 					</div>
 				</div>
 			</div>
-			<?php if ( $content != "" ): ?>
-				<div class="youtube-controls">
-					<ul>
-						<?php if ( self::$title_counter == 0 ): ?>
-							<li class="title">
-								<div>
-									<?php echo $atts['title']; ?>
-								</div>
-							</li>
-						<?php endif; ?>
-						<?php echo $content; ?>
-					</ul>
-				</div>
-			<?php endif; ?>
 		</div>
 		<?php
 		self::$player_id = null;
+		self::$wrapper_id = null;
+		
 		return ob_get_clean();
 	}
 	
@@ -180,7 +177,7 @@ class YouTube_Control_Shortcode {
 			$segments = array_reverse( split( ':', $timestamp ) );
 			$increments = array( 1, MINUTE_IN_SECONDS, HOUR_IN_SECONDS );
 			
-			for ( $i = 0; $i < count($segments); $i++ ):
+			for ( $i = 0; $i < count( $segments ); $i++ ):
 				$seconds += $segments[$i] * $increments[$i];
 			endfor;
 			
@@ -189,8 +186,9 @@ class YouTube_Control_Shortcode {
 			ob_start();
 			?>
 			<li class="control" onclick="<?php echo $action; ?>">
-				<div class="control-inner">
-					<?php echo $timestamp; ?> - <?php echo $title; ?>
+				<div class="inner">
+					<span class="onhover"><?php echo $title; ?></span>
+					<span class="timestamp"><?php echo $timestamp; ?></span>
 				</div>
 			</li>
 			<?php
@@ -209,14 +207,14 @@ class YouTube_Control_Shortcode {
 	 * @param mixed $content
 	 * @return void
 	 */
-	public static function title_shortcode( $atts, $content ) {
+	public static function title_shortcode( $atts, $content = "" ) {
 		if ( self::$player_id != null ):
 			self::$title_counter++;
 			ob_start();
 			?>
 			<li class="title">
-				<div class="control-inner">
-					<?php echo $atts[0]; ?>
+				<div class="inner">
+					<span class="onhover"><?php echo $atts[0]; ?></span>
 				</div>
 			</li>
 			<?php

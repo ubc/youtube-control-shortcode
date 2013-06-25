@@ -1,0 +1,47 @@
+/* ===== Auto ===== */
+.ytc-embed.auto:not(.playing) .ytc-controls:hover li .onhover {
+    display: inline-block;
+}
+
+/* ===== Compact ===== */
+.ytc-embed.compact .ytc-controls {
+    width: 40px;
+}
+
+.ytc-embed.compact .ytc-controls li {
+    text-align: center;
+    padding: 10px 2px;
+}
+
+.ytc-embed.compact .ytc-controls li .onhover {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 40px;
+    background: white;
+    padding: 10px;
+    box-shadow: 0 4px 2px -2px rgba(0,0,0,0.4);
+    white-space: nowrap;
+}
+
+.ytc-embed.compact .ytc-controls li .onhover {
+    display: none;
+}
+
+.ytc-embed.compact:not(.playing) .ytc-controls:hover li .onhover,
+.ytc-embed.compact .ytc-controls li:hover .onhover {
+    display: inline-block;
+}
+
+.ytc-embed.compact .ytc-controls li.control:hover .onhover {
+    background: #F5F5F5;
+}
+
+/* ===== Expanded ===== */
+.ytc-embed:not(.compact) .ytc-controls li {
+    padding: 10px;
+}
+
+.ytc-embed:not(.compact) .ytc-controls li .timestamp:before {
+    content: " - ";
+}

@@ -1,0 +1,84 @@
+.ytc-embed {
+    width: 100%;
+    outline: 1px solid lightgray;
+    overflow: hidden;
+    position: relative;
+}
+
+.ytc-embed br {
+    display: none;
+}
+
+.ytc-wrapper {
+    overflow: hidden;
+}
+
+.ytc-embed .iframe-wrapper,
+.ytc-embed .swfobject-wrapper {
+    position: relative;
+    width: 100%;
+    background: black;
+}
+
+.ytc-embed .iframe-wrapper iframe,
+.ytc-embed .swfobject-wrapper object {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+}
+
+
+/* ===== Controls ===== */
+.ytc-embed .ytc-controls {
+    background: white;
+    float: right;
+    height: 100%;
+    list-style: none;
+    margin-bottom: 0;
+}
+
+.ytc-embed .ytc-controls li {
+    position: relative;
+    line-height: 10px;
+    margin: 0;
+}
+
+.ytc-embed .ytc-controls li.title {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.785rem;
+}
+
+.ytc-embed .ytc-controls li.control {
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.ytc-embed .ytc-controls li.control:hover {
+    color: #21759B;
+    background: #F7F7F7;
+}
+
+.ytc-embed .ytc-controls li > * {
+    display: inline-block;
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.ytc-embed .onhover {
+    z-index: 10;
+}
+
+
+/* ===== Misc ===== */
+.ytc-embed .error {
+    margin: auto;
+    color: #D00;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 50px;
+    margin-bottom: -250px;
+    text-align: center;
+}
