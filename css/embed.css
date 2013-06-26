@@ -31,11 +31,14 @@
 
 /* ===== Controls ===== */
 .ytc-embed .ytc-controls {
-    background: white;
     float: right;
+}
+
+.ytc-embed .ytc-controls ul {
+    background: white;
     height: 100%;
     list-style: none;
-    margin-bottom: 0;
+    margin: 0;
 }
 
 .ytc-embed .ytc-controls li {

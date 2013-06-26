@@ -1,3 +1,13 @@
+/* ===== All ==== */
+.ytc-embed .ytc-controls li {
+    padding: 10px;
+}
+
+.ytc-embed .ytc-controls li.title {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
 /* ===== Auto ===== */
 .ytc-embed.auto:not(.playing) .ytc-controls:hover li .onhover {
     display: inline-block;
@@ -8,13 +18,14 @@
     width: 40px;
 }
 
-.ytc-embed.compact .ytc-controls li {
+.ytc-embed.compact.playing .ytc-controls li,
+.ytc-embed.compact .ytc-controls:not(:hover) li {
     text-align: center;
-    padding: 10px 2px;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
-.ytc-embed.compact .ytc-controls li .onhover {
-    display: none;
+.ytc-embed.compact.playing .ytc-controls li .onhover {
     position: absolute;
     top: 0;
     right: 40px;
@@ -37,11 +48,21 @@
     background: #F5F5F5;
 }
 
-/* ===== Expanded ===== */
-.ytc-embed:not(.compact) .ytc-controls li {
-    padding: 10px;
+.ytc-embed.compact:not(.playing) .ytc-controls:hover ul {
+    position: absolute;
+    right: 0;
+    z-index: 10;
 }
 
+.ytc-embed.compact:not(.playing) .ytc-controls:hover li {
+    text-align: right;
+}
+
+.ytc-embed.compact:not(.playing) .ytc-controls:hover li .timestamp:before {
+    content: " - ";
+}
+
+/* ===== Expanded ===== */
 .ytc-embed:not(.compact) .ytc-controls li .timestamp:before {
     content: " - ";
 }

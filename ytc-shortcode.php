@@ -132,14 +132,16 @@ class YouTube_Control_Shortcode {
 		?>
 		<div id="<?php echo self::$wrapper_id; ?>" class="ytc-embed <?php echo $classes; ?>" style="max-width: <?php echo $atts['width']; ?>" data-atts='<?php echo json_encode( $atts ); ?>' >
 			<?php if ( $content != "" ): ?>
-				<ul class="ytc-controls">
-					<?php
-						if ( self::$title_counter == 0 ):
-							echo self::title_shortcode( array( $atts['title'] ) );
-						endif;
-						echo $content;
-					?>
-				</ul>
+				<div class="ytc-controls">
+					<ul class="controls-inner">
+						<?php
+							if ( self::$title_counter == 0 ):
+								echo self::title_shortcode( array( $atts['title'] ) );
+							endif;
+							echo $content;
+						?>
+					</ul>
+				</div>
 			<?php endif; ?>
 			<div class="ytc-wrapper">
 				<div class="iframe-wrapper" style="padding-bottom: <?php echo $percentage; ?>%;">
