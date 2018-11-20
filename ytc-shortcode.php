@@ -16,7 +16,7 @@ class YouTube_Control_Shortcode {
 	static $title_counter;
 	static $player_id = null;
 	static $wrapper_id = null;
-	
+
 	static $defaults = array(
 		'id'       => '',
 		'title'    => "Browse Video Segments",
@@ -27,10 +27,10 @@ class YouTube_Control_Shortcode {
 		'width'    => '1320px',
 		'nav'      => 'auto',
 	);
-	
+
 	/**
 	 * init function.
-	 * 
+	 *
 	 * @access public
 	 * @static
 	 * @return void
@@ -39,14 +39,14 @@ class YouTube_Control_Shortcode {
 		add_shortcode( 'yc_video',   array( __CLASS__, 'youtube_shortcode' ) );
 		add_shortcode( 'yc_control', array( __CLASS__, 'control_shortcode' ) );
 		add_shortcode( 'yc_title',   array( __CLASS__, 'title_shortcode' ) );
-		
+
 		add_action( 'init',               array( __CLASS__, 'register_script' ) );
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'enqueue_style' ) );
 	}
-	
+
 	/**
 	 * register_script function.
-	 * 
+	 *
 	 * @access public
 	 * @static
 	 * @return void
@@ -55,10 +55,10 @@ class YouTube_Control_Shortcode {
 		wp_register_style( 'ytc-embed',  plugins_url( 'css/embed.css', __FILE__ ) );
 		wp_register_style( 'ytc-controls',  plugins_url( 'css/controls.css', __FILE__ ) );
 	}
-	
+
 	/**
 	 * enqueue_style function.
-	 * 
+	 *
 	 * @access public
 	 * @static
 	 * @return void
@@ -67,10 +67,10 @@ class YouTube_Control_Shortcode {
 		wp_enqueue_style( 'ytc-embed' );
 		wp_enqueue_style( 'ytc-controls' );
 	}
-	
+
 	/**
 	 * accordion_shortcode function.
-	 * 
+	 *
 	 * @access public
 	 * @static
 	 * @param mixed $atts
@@ -82,52 +82,52 @@ class YouTube_Control_Shortcode {
 		if ( ! isset( $atts['id'] ) ):
 			return;
 		endif;
-		
+
 		if ( in_array( 'autoplay', $atts ) ):
 			$atts['autoplay'] = 'true';
 		endif;
-		
+
 		if ( in_array( 'autohide', $atts ) ):
 			$atts['autohide'] = 'true';
 		endif;
-		
+
 		$atts = shortcode_atts( self::$defaults, $atts );
-		
+
 		if ( $atts['autoplay'] == '1' || $atts['autoplay'] == 'true' ):
 			$atts['autoplay'] = '1';
 		else:
 			$atts['autoplay'] = self::$defaults['autoplay'];
 		endif;
-		
+
 		if ( $atts['autohide'] == '1' || $atts['autohide'] == 'true' ):
 			$atts['autohide'] = '1';
 		else:
 			$atts['autohide'] = self::$defaults['autohide'];
 		endif;
-		
+
 		if ( $atts['theme'] != "light" ):
 			$atts['theme'] = self::$defaults['theme'];
 		endif;
-		
+
 		if ( ! in_array( $atts['nav'], array( 'auto', 'compact', 'expanded' ) ) ):
 			$atts['nav'] = self::$defaults['nav'];
 		elseif ( $atts['nav'] == 'expanded' ):
 			$atts['nav'] = "";
 		endif;
-		
+
 		self::$counter++;
 		self::$title_counter = 0;
 		self::$player_id = 'ytplayer-'.self::$counter;
 		self::$wrapper_id = 'ytc-wrapper-'.self::$counter;
-		
-		$ratio = split( ':', $atts['ratio'] );
+
+		$ratio = explode( ':', $atts['ratio'] );
 		$percentage = $ratio[1] / $ratio[0] * 100;
-		
+
 		$content = do_shortcode( $content );
-		
+
 		$classes = $atts['nav'];
 		$classes .= ( $content == "" ? " no-controls" : "" );
-		
+
 		ob_start();
 		?>
 		<div id="<?php echo self::$wrapper_id; ?>" class="ytc-embed <?php echo $classes; ?>" style="max-width: <?php echo $atts['width']; ?>" data-atts='<?php echo json_encode( $atts ); ?>' >
@@ -157,13 +157,13 @@ class YouTube_Control_Shortcode {
 		<?php
 		self::$player_id = null;
 		self::$wrapper_id = null;
-		
+
 		return ob_get_clean();
 	}
-	
+
 	/**
 	 * control_shortcode function.
-	 * 
+	 *
 	 * @access public
 	 * @static
 	 * @param mixed $atts
@@ -174,17 +174,17 @@ class YouTube_Control_Shortcode {
 		if ( self::$player_id != null ):
 			$timestamp = $atts[0];
 			$title = $atts[1];
-			
+
 			$seconds = 0;
-			$segments = array_reverse( split( ':', $timestamp ) );
+			$segments = array_reverse( explode( ':', $timestamp ) );
 			$increments = array( 1, MINUTE_IN_SECONDS, HOUR_IN_SECONDS );
-			
+
 			for ( $i = 0; $i < count( $segments ); $i++ ):
 				$seconds += $segments[$i] * $increments[$i];
 			endfor;
-			
+
 			$action = "YTControl_Shortcode.skipTo('".self::$player_id."', ".$seconds.");";
-			
+
 			ob_start();
 			?>
 			<li class="control" onclick="<?php echo $action; ?>">
@@ -199,10 +199,10 @@ class YouTube_Control_Shortcode {
 			return $content;
 		endif;
 	}
-	
+
 	/**
 	 * title_shortcode function.
-	 * 
+	 *
 	 * @access public
 	 * @static
 	 * @param mixed $atts
